@@ -1,12 +1,13 @@
-const {micro, send, buffer, text, json} = require('micro');
+const micro = require('micro');
+const {serve, send, buffer, text, json} = micro;
 const FloofBall = require('./lib/floofball.js');
 const FloofRenderer = require('./lib/renderer.js');
-const {AroundHandler, AroundHandlerQueue} = require('./lib/monad.js');
+const {ErrorHandler, AroundHandler, AroundHandlerQueue} = require('./lib/monad.js');
 
 class FloofRequest {
   constructor(endpoint, req, path, params, queries) {
     this.path = endpoint.path;
-    this.body = await endpoint.parseBody(req);
+    this.body = null;
     this.backing = req;
     this.method = req.method;
     this.code = req.statusCode;
@@ -28,6 +29,11 @@ class FloofRequest {
   query(key) {
     return this.queries.get(key);
   }
+  
+  async body() {
+    if (this.body) return this.body;
+    return this.body = await this.endpoint.parseBody(this.backing);
+  }
 }
 
 class WrappedEndpoint {
@@ -47,17 +53,21 @@ class WrappedEndpoint {
       } else {
         let adapted;
         try {
-          adapted = this.adaptQuery(paramType.type, value);
+          adapted = await this.adaptQuery(paramType.type, value);
         } catch (e) {
           throw new Floop(400, 'Bad request!');
         }
+        // TODO required params
         parsedParams.set(key, adapted);
       }
     }
     let wrapped = new FloofRequest(this, req, path, pathParams, parsedParams);
     wrapped = new Proxy(wrapped, {
-      get(key) {
-        return pathParams.get(key) || parsedParams.get(key);
+      has(target, key) {
+        return target.hasOwnProperty(key) || pathParams.has(key) || parsedParams.has(key);
+      },
+      get(target, key) {
+        return pathParams.get(key) || parsedParams.get(key) || target[key];
       },
     });
     const renderer = this.floof.renderer.contextualize(this.parent);
@@ -98,15 +108,15 @@ class EndpointNode {
         this.weak = new EndpointNode();
         this.weakName = steps[0].substring(1);
       }
-      return this.weak.stepTo(steps.subarray(1));
+      return this.weak.stepTo(steps.slice(1));
     }
     let child = this.strong.get(steps[0]);
-    if (!child) this.strong.set(child = new EndpointNode());
-    return child.stepTo(steps.subarray(1));
+    if (!child) this.strong.set(steps[0], child = new EndpointNode());
+    return child.stepTo(steps.slice(1));
   }
   
   getStrongestNode(steps, params = new Map()) {
-    const next = steps.subarray(1);
+    const next = steps.slice(1);
     const strong = this.strong.get(steps[0]);
     if (!steps.length) {
       return {
@@ -156,14 +166,26 @@ class EndpointRegistry {
   }
   
   async error(code, msg, endpoint) {
-    for (const error of endpoint.errors) {
-      if (error.matches(code)) {
-        const renderer = endpoint
-          ? this.floof.renderer.contextualize(endpoint.parent)
-          : this.floof.renderer;
-        return await error.executor(code, msg, renderer);
+    const response = await this.doError(code, msg, endpoint);
+    if (!(response instanceof Stoof)) return new Stoof(code, response);
+    return response;
+  }
+  
+  async doError(code, msg, endpoint) {
+    if (endpoint) {
+      for (const error of endpoint.parent.errors) {
+        if (error.matches(code)) {
+          const renderer = this.floof.renderer.contextualize(endpoint.parent)
+          return await error.executor(code, msg, renderer);
+        }
       }
     }
+    for (const error of this.floof.errors) {
+      if (error.matches(code)) {
+        return await error.executor(code, msg, this.floof.renderer);
+      }
+    }
+    return msg;
   }
   
   static parsePrelim(url) {
@@ -215,7 +237,7 @@ function defaultTypeAdapters(adapters = new Map()) {
     s = s.toLowerCase();
     if (s === 'true') return true;
     if (s === 'false') return false;
-    throw new Error();
+    throw new Error('Not a boolean!');
   });
   return adapters;
 }
@@ -226,6 +248,7 @@ class Floof {
     this.typeAdapters = defaultTypeAdapters();
     this.before = new AroundHandlerQueue();
     this.after = new AroundHandlerQueue();
+    this.errors = [];
     this.floofballs = [];
     this.endpoints = new EndpointRegistry(this);
     this.renderer = new FloofRenderer(this);
@@ -251,13 +274,19 @@ class Floof {
     return handler;
   }
   
+  error() {
+    const handler = new ErrorHandler();
+    this.errors.push(handler);
+    return handler;
+  }
+  
   ball(floofball) {
     this.floofballs.push(floofball);
     this.endpoints.register(floofball);
     return this;
   }
   
-  go(host = '127.0.0.1', port = 8080) {
+  go(host = '0.0.0.0', port = 8080) {
     const server = micro(async (req, res) => {
       const {path, params} = EndpointRegistry.parsePrelim(req.url);
       await this.before.run(req, params);
@@ -266,6 +295,7 @@ class Floof {
       for (const [key, value] of response.headers) {
         res.setHeader(key, value);
       }
+      if (!response.body.endsWith('\n')) response.body += '\n';
       send(res, response.code, response.body);
     });
     return new Promise((resolve, reject) => server.listen(port, host, resolve));
@@ -277,9 +307,9 @@ class Floof {
     try {
       return await resolved.endpoint.render(req, path, resolved.pathParams, params);
     } catch (e) {
-      if (e instanceof Floop) return await this.endpoints.error(e.code, e.message, resolved);
+      if (e instanceof Floop) return await this.endpoints.error(e.code, e.message, resolved.endpoint);
       console.error(e);
-      return await this.endpoints.error(500, 'Internal server error!', resolved);
+      return await this.endpoints.error(500, 'Internal server error!', resolved.endpoint);
     }
   }
 }
