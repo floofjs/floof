@@ -1,0 +1,17 @@
+<!doctype html>
+<title>Floofr</title>
+<link rel=stylesheet type=text/css href="/static/style.css">
+<div class=page>
+  <h1>Flaskr</h1>
+  <div class=metanav>
+  <? if (!req.session.authed) { ?>
+    <a href="/login">log in</a>
+  <? } else { ?>
+    <a href="/logout">log out</a>
+  <? } ?>
+  </div>
+  <? for (message of req.flashes) { ?>
+    <div class=flash><?= message ?></div>
+  <? } ?>
+  <? block body ?>
+</div>

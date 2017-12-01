@@ -1,0 +1,2 @@
+# Floofr #
+[Flaskr](https://github.com/pallets/flask/blob/master/examples/flaskr), ported to Floof! The database has been replaced with a simple non-persistent array and the session cookies are no longer encrypted, but it works! ...ish
