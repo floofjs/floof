@@ -3,38 +3,7 @@ const {serve, send, buffer, text, json} = micro;
 const FloofBall = require('./lib/floofball.js');
 const FloofRenderer = require('./lib/renderer.js');
 const {ErrorHandler, AroundHandler, AroundHandlerQueue} = require('./lib/monad.js');
-
-class FloofRequest {
-  constructor(endpoint, req, path, params, queries) {
-    this.path = endpoint.path;
-    this.body = null;
-    this.backing = req;
-    this.method = req.method;
-    this.code = req.statusCode;
-    this.status = req.statusMessage;
-    this.rawUrl = req.url;
-    this.url = path;
-    this.params = params;
-    this.queries = queries;
-  }
-  
-  header(key) {
-    return this.req.headers[key] || null;
-  }
-  
-  param(key) {
-    return this.params.get(key);
-  }
-  
-  query(key) {
-    return this.queries.get(key);
-  }
-  
-  async body() {
-    if (this.body) return this.body;
-    return this.body = await this.endpoint.parseBody(this.backing);
-  }
-}
+const {FloofRequest, Stoof, Floop} = require('./lib/objects.js');
 
 class WrappedEndpoint {
   constructor(floof, path, floofball, endpoint) {
@@ -204,24 +173,6 @@ class EndpointRegistry {
   }
 }
 
-class Stoof {
-  constructor(code, body) {
-    if (!body) {
-      this.code = 200;
-      this.body = code;
-    } else {
-      this.code = code;
-      this.body = body;
-    }
-    this.headers = new Map();
-  }
-  
-  header(key, value) {
-    this.headers.set(key, value);
-    return this;
-  }
-}
-
 function defaultBodyParsers(adapters = new Map()) {
   adapters.set('json', async req => await json(req));
   adapters.set('str', async req => await text(req));
@@ -288,6 +239,7 @@ class Floof {
   
   go(host = '0.0.0.0', port = 8080) {
     const server = micro(async (req, res) => {
+      console.log(`${req.method} -- ${req.url}`); // TODO better logging
       const {path, params} = EndpointRegistry.parsePrelim(req.url);
       await this.before.run(req, params);
       let response = await this.doRender(req, path, res, params);
@@ -311,13 +263,6 @@ class Floof {
       console.error(e);
       return await this.endpoints.error(500, 'Internal server error!', resolved.endpoint);
     }
-  }
-}
-
-class Floop extends Error {
-  constructor(code, message) {
-    super(message);
-    this.code = code;
   }
 }
 
