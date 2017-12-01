@@ -26,9 +26,11 @@ class WrappedEndpoint {
         } catch (e) {
           throw new Floop(400, 'Bad request!');
         }
-        // TODO required params
         parsedParams.set(key, adapted);
       }
+    }
+    for (const [key, {req}] of this.endpoint.query) {
+      if (req && !params.has(key)) throw new Floop(400, 'Bad request!');
     }
     let wrapped = new FloofRequest(this, req, path, pathParams, parsedParams);
     wrapped = new Proxy(wrapped, {
