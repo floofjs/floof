@@ -9,6 +9,7 @@
   "dependencies": {
     "cookie": "^0.3.1",
     "ejs": "^2.5.7",
+    "http-status": "^1.0.1",
     "micro": "^9.0.2",
     "send": "^0.16.1"
   },

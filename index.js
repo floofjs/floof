@@ -5,13 +5,23 @@ const sendStatic = require('send');
 const FloofBall = require('./lib/floofball.js');
 const FloofRenderer = require('./lib/renderer.js');
 const {ErrorHandler, AroundHandler, AroundHandlerQueue} = require('./lib/monad.js');
-const {FloofRequest, Stoof, Floop} = require('./lib/objects.js');
+const {FloofRequest, Stoof, redirect, Floop} = require('./lib/objects.js');
 const EndpointRegistry = require('./lib/endpoint.js')
 
 function defaultBodyParsers(adapters = new Map()) {
   adapters.set('json', async req => await json(req));
   adapters.set('str', async req => await text(req));
   adapters.set('buf', async req => await buffer(req));
+  adapters.set('form', async req => {
+    const entries = {};
+    console.log(await text(req));
+    for (const entry of (await text(req)).split('&')) {
+      const index = entry.indexOf('=');
+      entries[entry.substring(0, index)]
+        = decodeURIComponent(entry.substring(index + 1).replace(/\+/g, ' '));
+    }
+    return entries;
+  });
   return adapters;
 }
 
@@ -32,8 +42,8 @@ class Floof {
   constructor(options) {
     this.bodyParsers = defaultBodyParsers();
     this.typeAdapters = defaultTypeAdapters();
-    this.before = new AroundHandlerQueue();
-    this.after = new AroundHandlerQueue();
+    this.befores = new AroundHandlerQueue();
+    this.afters = new AroundHandlerQueue();
     this.errors = [];
     this.floofballs = [];
     this.endpoints = new EndpointRegistry(this);
@@ -50,13 +60,13 @@ class Floof {
   
   before() {
     const handler = new AroundHandler();
-    this.before.push(handler);
+    this.befores.push(handler);
     return handler;
   }
   
   after() {
     const handler = new AroundHandler();
-    this.after.push(handler);
+    this.afters.push(handler);
     return handler;
   }
   
@@ -79,13 +89,15 @@ class Floof {
         sendStatic(req, req.url.substring(1)).pipe(res);
       } else {
         const {path, params} = EndpointRegistry.parsePrelim(req.url);
-        await this.before.run(req, params);
+        await this.befores.run(req, params);
         let response = await this.doRender(req, path, res, params);
-        await this.after.run(req, response, params);
+        await this.afters.run(req, response, params);
         for (const [key, value] of response.headers) {
           res.setHeader(key, value);
         }
-        if (!response.body.endsWith('\n')) response.body += '\n';
+        if (typeof response.body === 'string' && !response.body.endsWith('\n')) {
+          response.body += '\n';
+        }
         send(res, response.code, response.body);
       }
     });
@@ -100,9 +112,9 @@ class Floof {
     } catch (e) {
       if (e instanceof Floop) return await this.endpoints.error(e.code, e.message, resolved.endpoint);
       console.error(e);
-      return await this.endpoints.error(500, 'Internal server error!', resolved.endpoint);
+      return await this.endpoints.error(500, null, resolved.endpoint);
     }
   }
 }
 
-module.exports = {Floof, FloofBall, Floop, Stoof};
+module.exports = {Floof, FloofBall, Floop, Stoof, redirect};
