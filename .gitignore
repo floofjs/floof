@@ -3,6 +3,3 @@ node_modules/
 *.bat
 *.sh
 users.json
-templates/
-static/
-test.js

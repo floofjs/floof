@@ -3,7 +3,7 @@ const micro = require('micro');
 const {serve, send, buffer, text, json} = micro;
 const sendStatic = require('send');
 const FloofBall = require('./lib/floofball.js');
-const FloofRenderer = require('./lib/renderer.js');
+const {FloofRenderer, getBaseDir} = require('./lib/renderer.js');
 const {ErrorHandler, AroundHandler, AroundHandlerQueue} = require('./lib/monad.js');
 const {FloofRequest, Stoof, redirect, Floop} = require('./lib/objects.js');
 const EndpointRegistry = require('./lib/endpoint.js')
@@ -86,7 +86,7 @@ class Floof {
     const server = micro(async (req, res) => {
       console.log(`<= ${req.method} -- ${req.url}`); // TODO better logging
       if (req.url.startsWith('/static')) {
-        sendStatic(req, req.url.substring(1)).pipe(res);
+        sendStatic(req, getBaseDir(req.url.substring(1))).pipe(res);
       } else {
         const {path, params} = EndpointRegistry.parsePrelim(req.url);
         await this.befores.run(req, params);
