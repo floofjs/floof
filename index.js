@@ -1,5 +1,7 @@
+const fs = require('fs');
 const micro = require('micro');
 const {serve, send, buffer, text, json} = micro;
+const sendStatic = require('send');
 const FloofBall = require('./lib/floofball.js');
 const FloofRenderer = require('./lib/renderer.js');
 const {ErrorHandler, AroundHandler, AroundHandlerQueue} = require('./lib/monad.js');
@@ -72,16 +74,20 @@ class Floof {
   
   go(host = '0.0.0.0', port = 8080) {
     const server = micro(async (req, res) => {
-      console.log(`${req.method} -- ${req.url}`); // TODO better logging
-      const {path, params} = EndpointRegistry.parsePrelim(req.url);
-      await this.before.run(req, params);
-      let response = await this.doRender(req, path, res, params);
-      await this.after.run(req, response, params);
-      for (const [key, value] of response.headers) {
-        res.setHeader(key, value);
+      console.log(`<= ${req.method} -- ${req.url}`); // TODO better logging
+      if (req.url.startsWith('/static')) {
+        sendStatic(req, req.url.substring(1)).pipe(res);
+      } else {
+        const {path, params} = EndpointRegistry.parsePrelim(req.url);
+        await this.before.run(req, params);
+        let response = await this.doRender(req, path, res, params);
+        await this.after.run(req, response, params);
+        for (const [key, value] of response.headers) {
+          res.setHeader(key, value);
+        }
+        if (!response.body.endsWith('\n')) response.body += '\n';
+        send(res, response.code, response.body);
       }
-      if (!response.body.endsWith('\n')) response.body += '\n';
-      send(res, response.code, response.body);
     });
     return new Promise((resolve, reject) => server.listen(port, host, resolve));
   }
