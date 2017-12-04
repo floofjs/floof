@@ -32,7 +32,7 @@ function defaultTypeAdapters(adapters = new Map()) {
     s = s.toLowerCase();
     if (s === 'true') return true;
     if (s === 'false') return false;
-    throw new Error('Not a boolean!');
+    throw new Floop(400, 'Not a boolean!');
   });
   return adapters;
 }
@@ -104,12 +104,15 @@ class Floof {
   }
   
   async doRender(req, path, res, params) {
-    const resolved = await this.endpoints.resolve(req.method, path);
-    if (!resolved) return await this.endpoints.error(404, `Resource not found: ${path}`);
+    let resolved;
     try {
+      resolved = await this.endpoints.resolve(req.method, path);
+      if (!resolved || !resolved.endpoint) {
+        return await this.endpoints.error(404, `Resource not found: ${path}`);
+      }
       return await resolved.endpoint.render(req, path, resolved.pathParams, params);
     } catch (e) {
-      if (e instanceof Floop) return await this.endpoints.error(e.code, e.message, resolved.endpoint);
+      if (e instanceof Floop) return await this.endpoints.error(e.code, e.message, resolved ? resolved.endpoint : null);
       console.error(e);
       return await this.endpoints.error(500, null, resolved.endpoint);
     }
