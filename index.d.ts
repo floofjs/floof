@@ -57,28 +57,58 @@ declare module 'floof' {
     public delete(path: string): EndpointHandler;
   }
   
-  export class BeforeHandler {
-    // TODO typings
+  export class AroundHandler {
+    public when(filter: (...args: any[]) => boolean): AroundHandler;
+    
+    public exec(func: (...args: any[]) => void): AroundHandler;
   }
   
-  export class AfterHandler {
-    // TODO typings
+  export class BeforeHandler extends AroundHandler {
+    public when(filter: (req: FloofRequest) => boolean): BeforeHandler;
+    
+    public exec(func: (req: FloofRequest) => void): BeforeHandler;
   }
   
-  export class GlobalBeforeHandler {
-    // TODO typings
+  export class AfterHandler extends AroundHandler {
+    public when(filter: (req: FloofRequest, res: Stoof) => boolean): AfterHandler;
+    
+    public exec(func: (req: FloofRequest, res: Stoof) => void): AfterHandler;
   }
   
-  export class GlobalAfterHandler {
-    // TODO typings
+  export class GlobalBeforeHandler extends AroundHandler {
+    public when(filter: (req: IncomingMessage, params: Map<string, string>) => boolean): GlobalBeforeHandler;
+    
+    public exec(func: (req: IncomingMessage, params: Map<string, string>) => void): GlobalBeforeHandler;
+  }
+  
+  export class GlobalAfterHandler extends AroundHandler {
+    public when(filter: (req: IncomingMessage, res: Stoof, params: Map<string, string>) => boolean): GlobalAfterHandler;
+    
+    public exec(func: (req: IncomingMessage, res: Stoof, params: Map<string, string>) => void): GlobalAfterHandler;
   }
   
   export class ErrorHandler {
-    // TODO typings
+    public forCode(...code: number[]): ErrorHandler;
+    
+    public forCodes(startIncl: number, endExcl: number): ErrorHandler;
+    
+    public exec(func: (code: number, msg: string, ren: ContextualizedRenderer)): void;
+  }
+  
+  export class GlobalErrorHandler {
+    public forCode(...code: number[]): GlobalErrorHandler;
+    
+    public forCodes(startIncl: number, endExcl: number): GlobalErrorHandler;
+    
+    public exec(func: (code: number, msg: string, ren: Renderer)): void;
   }
   
   export class EndpointHandler {
-    // TODO typings
+    public withQuery(key: string, type?: string, req?: boolean): EndpointHandler;
+    
+    public withBody(type: string): EndpointHandler;
+    
+    public exec(func: (req: FloofRequest, ren: ContextualizedRenderer) => Stoof): void;
   }
   
   export class FloofRenderer {
