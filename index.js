@@ -25,10 +25,10 @@ function defaultBodyParsers(adapters = new Map()) {
 }
 
 function defaultTypeAdapters(adapters = new Map()) {
-  adapters.set('str', async s => s);
-  adapters.set('int', async s => parseInt(s, 10));
-  adapters.set('float', async s => parseFloat(s));
-  adapters.set('bool', async s => {
+  adapters.set('str', s => s);
+  adapters.set('int', s => parseInt(s, 10));
+  adapters.set('float', s => parseFloat(s));
+  adapters.set('bool', s => {
     s = s.toLowerCase();
     if (s === 'true') return true;
     if (s === 'false') return false;
