@@ -31,7 +31,7 @@ app.get('/').exec((req, ren) => {
 });
 
 app.post('/add').withBody('form').exec(async (req, ren) => {
-  if (!req.cookie('auth')) throw new Floop(401);
+  if (!req.session.authed) throw new Floop(401);
   const body = await req.body();
   console.log(body);
   entries.push({

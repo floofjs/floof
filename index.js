@@ -14,7 +14,6 @@ function defaultBodyParsers(adapters = new Map()) {
   adapters.set('buf', async req => await buffer(req));
   adapters.set('form', async req => {
     const entries = {};
-    console.log(await text(req));
     for (const entry of (await text(req)).split('&')) {
       const index = entry.indexOf('=');
       entries[entry.substring(0, index)]
@@ -39,7 +38,7 @@ function defaultTypeAdapters(adapters = new Map()) {
 }
 
 class Floof {
-  constructor(options) {
+  constructor() {
     this.bodyParsers = defaultBodyParsers();
     this.typeAdapters = defaultTypeAdapters();
     this.befores = new AroundHandlerQueue();

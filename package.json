@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Yet another node web application backend framework",
   "main": "index.js",
+  "types": "index.d.ts",
   "repository": "https://github.com/floofjs/floof.git",
   "author": "phantamanta44",
   "license": "MIT",
