@@ -104,7 +104,7 @@ class Floof {
   }
   
   async doRender(req, path, res, params) {
-    const resolved = this.endpoints.resolve(req.method, path);
+    const resolved = await this.endpoints.resolve(req.method, path);
     if (!resolved) return await this.endpoints.error(404, `Resource not found: ${path}`);
     try {
       return await resolved.endpoint.render(req, path, resolved.pathParams, params);
