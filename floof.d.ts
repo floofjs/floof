@@ -2,18 +2,22 @@ declare module 'floof' {
   import { IncomingMessage } from 'http';
   
   /**
+   * An object that's been typecasted via a body parser or type adapter.
+   * May or may not be a promise.
+   */
+  type Adapted = Promise<any> | any;
+  
+  /**
    * A function that consumes an IncomingMessage, parses the message body, and produces the result.
    * May or may not be async.
    */
-  type BodyParser = (req: IncomingMessage) => any
-    | (req: IncomingMessage) => Promise<any>;
+  type BodyParser = (req: IncomingMessage) => Adapted;
   
   /**
    * A function that consumes a string, parses is at some type, and produces the result.
    * May or may not be async.
    */
-  type TypeAdapter = (s: string) => any
-    | (s: string) => Promise<any>;
+  type TypeAdapter = (s: string) => Adapted;
   
   /**
    * An object mapping arbitrary string keys to arbitrary values for use in rendering a template.
@@ -295,7 +299,7 @@ declare module 'floof' {
      * @returns This handler, for the sake of chaining.
      */
     public when(filter: (req: IncomingMessage, res: Stoof, params: Map<string, string>) => boolean): GlobalAfterHandler;
-    s
+    
     /**
      * Sets an executor on this handler. Executors run in order of registration.
      * @param func An executor that accepts an IncomingMessage, a Stoof, and a Map<string, string> of query parameters.
@@ -305,9 +309,9 @@ declare module 'floof' {
   }
   
   /**
-   * Handles erroneous HTTP status codes. You might, for example, use this to display a custom 404 page.
+   * Defines a contract for ErrorHandler and GlobalErrorHandler.
    */
-  export class ErrorHandler {
+  class ErrorHandlerBase {
     /**
      * Sets specific HTTP status codes to run this handler for.
      * @param code The HTTP status codes to handle.
@@ -322,26 +326,31 @@ declare module 'floof' {
      * @returns This ErrorHandler, for the sake of chaining.
      */
     public forCodes(startIncl: number, endExcl: number): ErrorHandler;
-    
+  }
+  
+  /**
+   * Handles erroneous HTTP status codes. You might, for example, use this to display a custom 404 page.
+   */
+  export class ErrorHandler extends ErrorHandlerBase {
     /**
      * Sets an executor on this handler for the specified HTTP status codes or code ranges.
      * If no specific codes or code ranges are specified, this handler will handle all status codes.
      * @param func The executor function, which accepts the status code, the status message, and a ContextualizedRenderer.
      */
-    public exec(func: (code: number, msg: string, ren: ContextualizedRenderer)): void;
+    public exec(func: (code: number, msg: string, ren: ContextualizedRenderer) => void): void;
   }
   
   /**
    * Handles erroneous HTTP status codes at a global level (i.e. not associated with a floofball).
    * Used when an error is thrown outside the context of a floofball.
    */
-  export class GlobalErrorHandler extends ErrorHandler {
+  export class GlobalErrorHandler extends ErrorHandlerBase {
     /**
      * Sets an executor on this handler for the specified HTTP status codes or code ranges.
      * If no specific codes or code ranges are specified, this handler will handle all status codes.
      * @param func The executor function, which accepts the status code, the status message, and the FloofRenderer.
      */
-    public exec(func: (code: number, msg: string, ren: Renderer)): void;
+    public exec(func: (code: number, msg: string, ren: FloofRenderer) => void): void;
   }
   
   /**
