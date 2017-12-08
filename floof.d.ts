@@ -58,6 +58,17 @@ declare module 'floof' {
   type RedirectCode = 301 | 302 | 303 | 305 | 307;
   
   /**
+   * A plugin that defines additional behaviour for a floofball.
+   */
+  interface FloofPlugin {
+    /**
+     * Called upon plugin registration.
+     * This is where you should register handlers to extend the floofball's behaviour.
+     */
+    init(floofball: FloofBall): void;
+  }
+  
+  /**
    * A floof application. This is where the magic happens.
    */
   export class Floof {
@@ -143,6 +154,13 @@ declare module 'floof' {
      * @returns This FloofBall, for the sake of chaining.
      */
     public context(context: RenderContext): FloofBall;
+    
+    /**
+     * Registers a plugin.
+     * @param plugin The plugin to be registered.
+     * @returns This FloofBall, for the sake of chaining.
+     */
+    public plugin(plugin: FloofPlugin): FloofBall;
     
     /**
      * Registers a new before-handler which gets run before any endpoint handler.

@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>ErrorHandler | floof</title>
+	<title>FloofPlugin | floof</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -60,10 +60,10 @@
 					<a href="../modules/_floof_d_._floof_.html">&quot;floof&quot;</a>
 				</li>
 				<li>
-					<a href="_floof_d_._floof_.errorhandler.html">ErrorHandler</a>
+					<a href="_floof_d_._floof_.floofplugin.html">FloofPlugin</a>
 				</li>
 			</ul>
-			<h1>Class ErrorHandler</h1>
+			<h1>Interface FloofPlugin</h1>
 		</div>
 	</div>
 </header>
@@ -73,7 +73,7 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Handles erroneous HTTP status codes. You might, for example, use this to display a custom 404 page.</p>
+						<p>A plugin that defines additional behaviour for a floofball.</p>
 					</div>
 				</div>
 			</section>
@@ -81,12 +81,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<a href="_floof_d_._floof_.errorhandlerbase.html" class="tsd-signature-type">ErrorHandlerBase</a>
-						<ul class="tsd-hierarchy">
-							<li>
-								<span class="target">ErrorHandler</span>
-							</li>
-						</ul>
+						<span class="target">FloofPlugin</span>
 					</li>
 				</ul>
 			</section>
@@ -94,144 +89,43 @@
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
-						<section class="tsd-index-section ">
+						<section class="tsd-index-section tsd-is-not-exported">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_floof_d_._floof_.errorhandler.html#exec" class="tsd-kind-icon">exec</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_floof_d_._floof_.errorhandler.html#forcode" class="tsd-kind-icon">for<wbr>Code</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_floof_d_._floof_.errorhandler.html#forcodes" class="tsd-kind-icon">for<wbr>Codes</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="_floof_d_._floof_.floofplugin.html#init" class="tsd-kind-icon">init</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group ">
+			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
 				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="exec" class="tsd-anchor"></a>
-					<h3>exec</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">exec<span class="tsd-signature-symbol">(</span>func<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+					<a name="init" class="tsd-anchor"></a>
+					<h3>init</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+						<li class="tsd-signature tsd-kind-icon">init<span class="tsd-signature-symbol">(</span>floofball<span class="tsd-signature-symbol">: </span><a href="../classes/_floof_d_._floof_.floofball.html" class="tsd-signature-type">FloofBall</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/floofjs/floof/blob/f212a3d/floof.d.ts#L358">floof.d.ts:358</a></li>
+									<li>Defined in <a href="https://github.com/floofjs/floof/blob/f212a3d/floof.d.ts#L68">floof.d.ts:68</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Sets an executor on this handler for the specified HTTP status codes or code ranges.
-									If no specific codes or code ranges are specified, this handler will handle all status codes.</p>
+									<p>Called upon plugin registration.
+									This is where you should register handlers to extend the floofball&#39;s behaviour.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>func: <span class="tsd-signature-type">function</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>The executor function, which accepts the status code, the status message, and a ContextualizedRenderer.</p>
-									</div>
-									<ul class="tsd-parameters">
-										<li class="tsd-parameter-siganture">
-											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
-												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>code<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, msg<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, ren<span class="tsd-signature-symbol">: </span><a href="_floof_d_._floof_.contextualizedrenderer.html" class="tsd-signature-type">ContextualizedRenderer</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-											</ul>
-											<ul class="tsd-descriptions">
-												<li class="tsd-description">
-													<h4 class="tsd-parameters-title">Parameters</h4>
-													<ul class="tsd-parameters">
-														<li>
-															<h5>code: <span class="tsd-signature-type">number</span></h5>
-														</li>
-														<li>
-															<h5>msg: <span class="tsd-signature-type">string</span></h5>
-														</li>
-														<li>
-															<h5>ren: <a href="_floof_d_._floof_.contextualizedrenderer.html" class="tsd-signature-type">ContextualizedRenderer</a></h5>
-														</li>
-													</ul>
-													<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-												</li>
-											</ul>
-										</li>
-									</ul>
+									<h5>floofball: <a href="../classes/_floof_d_._floof_.floofball.html" class="tsd-signature-type">FloofBall</a></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-					<a name="forcode" class="tsd-anchor"></a>
-					<h3>for<wbr>Code</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">for<wbr>Code<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>code<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_floof_d_._floof_.errorhandler.html" class="tsd-signature-type">ErrorHandler</a></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<p>Inherited from <a href="_floof_d_._floof_.errorhandlerbase.html">ErrorHandlerBase</a>.<a href="_floof_d_._floof_.errorhandlerbase.html#forcode">forCode</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/floofjs/floof/blob/f212a3d/floof.d.ts#L338">floof.d.ts:338</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Sets specific HTTP status codes to run this handler for.</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>code: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>The HTTP status codes to handle.</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="_floof_d_._floof_.errorhandler.html" class="tsd-signature-type">ErrorHandler</a></h4>
-							<p>This ErrorHandler, for the sake of chaining.</p>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-					<a name="forcodes" class="tsd-anchor"></a>
-					<h3>for<wbr>Codes</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">for<wbr>Codes<span class="tsd-signature-symbol">(</span>startIncl<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, endExcl<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_floof_d_._floof_.errorhandler.html" class="tsd-signature-type">ErrorHandler</a></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<p>Inherited from <a href="_floof_d_._floof_.errorhandlerbase.html">ErrorHandlerBase</a>.<a href="_floof_d_._floof_.errorhandlerbase.html#forcodes">forCodes</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/floofjs/floof/blob/f212a3d/floof.d.ts#L346">floof.d.ts:346</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Sets a range of HTTP status codes to run this handler for.</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>startIncl: <span class="tsd-signature-type">number</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>The beginning of the range, inclusive.</p>
-									</div>
-								</li>
-								<li>
-									<h5>endExcl: <span class="tsd-signature-type">number</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>The end of the range, exclusive.</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="_floof_d_._floof_.errorhandler.html" class="tsd-signature-type">ErrorHandler</a></h4>
-							<p>This ErrorHandler, for the sake of chaining.</p>
 						</li>
 					</ul>
 				</section>
@@ -248,71 +142,65 @@
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="_floof_d_._floof_.afterhandler.html" class="tsd-kind-icon">After<wbr>Handler</a>
+						<a href="../classes/_floof_d_._floof_.afterhandler.html" class="tsd-kind-icon">After<wbr>Handler</a>
 					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="_floof_d_._floof_.aroundhandler.html" class="tsd-kind-icon">Around<wbr>Handler</a>
+						<a href="../classes/_floof_d_._floof_.aroundhandler.html" class="tsd-kind-icon">Around<wbr>Handler</a>
 					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="_floof_d_._floof_.beforehandler.html" class="tsd-kind-icon">Before<wbr>Handler</a>
+						<a href="../classes/_floof_d_._floof_.beforehandler.html" class="tsd-kind-icon">Before<wbr>Handler</a>
 					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="_floof_d_._floof_.contextualizedrenderer.html" class="tsd-kind-icon">Contextualized<wbr>Renderer</a>
+						<a href="../classes/_floof_d_._floof_.contextualizedrenderer.html" class="tsd-kind-icon">Contextualized<wbr>Renderer</a>
 					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="_floof_d_._floof_.endpointhandler.html" class="tsd-kind-icon">Endpoint<wbr>Handler</a>
+						<a href="../classes/_floof_d_._floof_.endpointhandler.html" class="tsd-kind-icon">Endpoint<wbr>Handler</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="../classes/_floof_d_._floof_.errorhandler.html" class="tsd-kind-icon">Error<wbr>Handler</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module tsd-is-not-exported">
+						<a href="../classes/_floof_d_._floof_.errorhandlerbase.html" class="tsd-kind-icon">Error<wbr>Handler<wbr>Base</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="../classes/_floof_d_._floof_.floof.html" class="tsd-kind-icon">Floof</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="../classes/_floof_d_._floof_.floofball.html" class="tsd-kind-icon">Floof<wbr>Ball</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="../classes/_floof_d_._floof_.floofrenderer.html" class="tsd-kind-icon">Floof<wbr>Renderer</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="../classes/_floof_d_._floof_.floofrequest.html" class="tsd-kind-icon">Floof<wbr>Request</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="../classes/_floof_d_._floof_.floop.html" class="tsd-kind-icon">Floop</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="../classes/_floof_d_._floof_.globalafterhandler.html" class="tsd-kind-icon">Global<wbr>After<wbr>Handler</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="../classes/_floof_d_._floof_.globalbeforehandler.html" class="tsd-kind-icon">Global<wbr>Before<wbr>Handler</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="../classes/_floof_d_._floof_.globalerrorhandler.html" class="tsd-kind-icon">Global<wbr>Error<wbr>Handler</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="../classes/_floof_d_._floof_.stoof.html" class="tsd-kind-icon">Stoof</a>
 					</li>
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-class tsd-parent-kind-module">
-						<a href="_floof_d_._floof_.errorhandler.html" class="tsd-kind-icon">Error<wbr>Handler</a>
+					<li class="current tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported">
+						<a href="_floof_d_._floof_.floofplugin.html" class="tsd-kind-icon">Floof<wbr>Plugin</a>
 						<ul>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_floof_d_._floof_.errorhandler.html#exec" class="tsd-kind-icon">exec</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="_floof_d_._floof_.errorhandler.html#forcode" class="tsd-kind-icon">for<wbr>Code</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="_floof_d_._floof_.errorhandler.html#forcodes" class="tsd-kind-icon">for<wbr>Codes</a>
+							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+								<a href="_floof_d_._floof_.floofplugin.html#init" class="tsd-kind-icon">init</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-class tsd-parent-kind-module tsd-is-not-exported">
-						<a href="_floof_d_._floof_.errorhandlerbase.html" class="tsd-kind-icon">Error<wbr>Handler<wbr>Base</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="_floof_d_._floof_.floof.html" class="tsd-kind-icon">Floof</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="_floof_d_._floof_.floofball.html" class="tsd-kind-icon">Floof<wbr>Ball</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="_floof_d_._floof_.floofrenderer.html" class="tsd-kind-icon">Floof<wbr>Renderer</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="_floof_d_._floof_.floofrequest.html" class="tsd-kind-icon">Floof<wbr>Request</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="_floof_d_._floof_.floop.html" class="tsd-kind-icon">Floop</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="_floof_d_._floof_.globalafterhandler.html" class="tsd-kind-icon">Global<wbr>After<wbr>Handler</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="_floof_d_._floof_.globalbeforehandler.html" class="tsd-kind-icon">Global<wbr>Before<wbr>Handler</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="_floof_d_._floof_.globalerrorhandler.html" class="tsd-kind-icon">Global<wbr>Error<wbr>Handler</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="_floof_d_._floof_.stoof.html" class="tsd-kind-icon">Stoof</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported">
-						<a href="../interfaces/_floof_d_._floof_.floofplugin.html" class="tsd-kind-icon">Floof<wbr>Plugin</a>
-					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-is-not-exported">
 						<a href="../modules/_floof_d_._floof_.html#adapted" class="tsd-kind-icon">Adapted</a>
 					</li>

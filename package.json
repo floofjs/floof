@@ -1,6 +1,6 @@
 {
   "name": "floof",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Yet another node web application backend framework",
   "main": "index.js",
   "types": "floof.d.ts",
@@ -8,6 +8,7 @@
   "author": "phantamanta44",
   "license": "MIT",
   "dependencies": {
+    "@types/node": "^8.0.57",
     "cookie": "^0.3.1",
     "ejs": "^2.5.7",
     "http-status": "^1.0.1",
