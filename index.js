@@ -88,6 +88,8 @@ class Floof {
         sendStatic(req, getBaseDir(req.url.substring(1))).pipe(res);
       } else {
         const {path, params} = EndpointRegistry.parsePrelim(req.url);
+        req.query = {};
+        for (const [qKey, qValue] of params) req.query[qKey] = qValue;
         await this.befores.run(req, params);
         let response = await this.doRender(req, path, res, params);
         await this.afters.run(req, response, params);
