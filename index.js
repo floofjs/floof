@@ -42,7 +42,7 @@ class Floof {
     this.bodyParsers = defaultBodyParsers();
     this.typeAdapters = defaultTypeAdapters();
     this.befores = new AroundHandlerQueue();
-    this.afters = new AroundHandlerQueue();
+    this.afters = new AroundHandlerQueue(true);
     this.errors = [];
     this.floofballs = [];
     this.endpoints = new EndpointRegistry(this);
