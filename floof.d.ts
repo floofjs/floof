@@ -355,7 +355,7 @@ declare module 'floof' {
      * If no specific codes or code ranges are specified, this handler will handle all status codes.
      * @param func The executor function, which accepts the status code, the status message, and a ContextualizedRenderer.
      */
-    public exec(func: (code: number, msg: string, ren: ContextualizedRenderer) => void): void;
+    public exec(func: (req: IncomingMessage, msg: string, ren: ContextualizedRenderer) => void): void;
   }
   
   /**
@@ -368,7 +368,7 @@ declare module 'floof' {
      * If no specific codes or code ranges are specified, this handler will handle all status codes.
      * @param func The executor function, which accepts the status code, the status message, and the FloofRenderer.
      */
-    public exec(func: (code: number, msg: string, ren: FloofRenderer) => void): void;
+    public exec(func: (req: IncomingMessage, msg: string, ren: FloofRenderer) => void): void;
   }
   
   /**

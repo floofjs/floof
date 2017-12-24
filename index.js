@@ -110,13 +110,18 @@ class Floof {
     try {
       resolved = await this.endpoints.resolve(req.method, path);
       if (!resolved || !resolved.endpoint) {
-        return await this.endpoints.error(404, `Resource not found: ${path}`);
+        req.statusCode = 404;
+        return await this.endpoints.error(req, `Resource not found: ${path}`);
       }
       return await resolved.endpoint.render(req, path, resolved.pathParams, params);
     } catch (e) {
-      if (e instanceof Floop) return await this.endpoints.error(e.code, e.message, resolved ? resolved.endpoint : null);
+      if (e instanceof Floop) {
+        req.statusCode = e.code;
+        return await this.endpoints.error(req, e.message, resolved ? resolved.endpoint : null);
+      }
       console.error(e);
-      return await this.endpoints.error(500, null, resolved.endpoint);
+      req.statusCode = 500;
+      return await this.endpoints.error(req, null, resolved.endpoint);
     }
   }
 }
