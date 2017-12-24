@@ -1,6 +1,6 @@
 {
   "name": "floof",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "Yet another node web application backend framework",
   "main": "index.js",
   "types": "floof.d.ts",
