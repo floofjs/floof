@@ -353,9 +353,9 @@ declare module 'floof' {
     /**
      * Sets an executor on this handler for the specified HTTP status codes or code ranges.
      * If no specific codes or code ranges are specified, this handler will handle all status codes.
-     * @param func The executor function, which accepts the status code, the status message, and a ContextualizedRenderer.
+     * @param func The executor function, which accepts the incoming request, the status message, and a ContextualizedRenderer.
      */
-    public exec(func: (req: IncomingMessage, msg: string, ren: ContextualizedRenderer) => void): void;
+    public exec(func: (req: FloofRequest, msg: string, ren: ContextualizedRenderer) => void): void;
   }
   
   /**
@@ -366,9 +366,21 @@ declare module 'floof' {
     /**
      * Sets an executor on this handler for the specified HTTP status codes or code ranges.
      * If no specific codes or code ranges are specified, this handler will handle all status codes.
-     * @param func The executor function, which accepts the status code, the status message, and the FloofRenderer.
+     * @param func The executor function, which accepts the incoming request, the status message, and the FloofRenderer.
      */
-    public exec(func: (req: IncomingMessage, msg: string, ren: FloofRenderer) => void): void;
+    public exec(func: (req: ErrorMessage, msg: string, ren: FloofRenderer) => void): void;
+  }
+  
+  /**
+   * An IncomingMessage object augmented to facilitate easier error handling.
+   */
+  export class ErrorMessage extends IncomingMessage {
+    /**
+     * Delegates the error handling to a module's error handlers.
+     * If none exists, the HTTP status message is just returned.
+     * @param floofball The module to delegate error handling to.
+     */
+    public delegateError(floofball: FloofBall): FloofResponse;
   }
   
   /**
